@@ -4,9 +4,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.rone.study.springBoot.model.Result;
 import org.rone.study.springBoot.model.User;
+import org.rone.study.springBoot.model.ViewLog;
 import org.rone.study.springBoot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 /**
  * Created by rone on 2018/4/26.
@@ -22,7 +25,8 @@ public class TestController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ApiOperation(value = "纯测试请求", notes = "仅仅是为了测试请求是否能通")
     public Result<?> test() {
-        return Result.success("测试请求成功！");
+        return Result.success(new ViewLog("test.", new Date()));
+//        return Result.success("测试请求成功！");
     }
 
     @RequestMapping(value = "/getUsers", method = RequestMethod.GET)
