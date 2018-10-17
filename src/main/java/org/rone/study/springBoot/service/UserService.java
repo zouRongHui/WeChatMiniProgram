@@ -61,6 +61,10 @@ public class UserService {
         return userDao.getUserPartDataByName(userName);
     }
 
+    public List<Map> getUserPartDataListByName(String userName) throws Exception {
+        return userDao.getUserPartDataListByName(userName);
+    }
+
     public void updateUserEmailByName(String name, String email) throws Exception {
         userDao.updateUserEmailByName(name, email);
     }

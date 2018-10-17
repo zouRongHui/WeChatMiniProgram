@@ -96,6 +96,16 @@ public class TestController {
             return Result.fault(e.getMessage(), e);
         }
     }
+    @RequestMapping(value = "/getUserPartDataListByName/{userName}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据用户名获取用户部分信息列表")
+    public Result<?> getUserPartDataListByName(@PathVariable("userName") String name) {
+        try {
+            return Result.success(userService.getUserPartDataListByName(name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fault(e.getMessage(), e);
+        }
+    }
 
     @RequestMapping(value = "/updateUserEmailByName", method = RequestMethod.PUT)
     @ApiOperation(value = "根据用户名更改邮箱")

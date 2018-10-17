@@ -21,6 +21,9 @@ public interface UserMapper {
     @Select("select name,email from employee where name=#{userName}")
     Map getUserDataByName(@Param("userName") String userName);
 
+    @Select("select name,email from employee where name=#{userName}")
+    List<Map> getUserDataListByName(@Param("userName") String userName);
+
     @Update("update employee set email=#{email} where name=#{userName}")
     void updateUserEmailByName(@Param("userName") String userName, @Param("email") String email);
 
