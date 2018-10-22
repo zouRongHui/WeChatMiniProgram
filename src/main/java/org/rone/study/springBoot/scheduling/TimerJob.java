@@ -26,6 +26,11 @@ public class TimerJob implements SchedulingConfigurer {
             }
             System.out.println("==============定时任务完成============");
         }, triggerContext -> {
+            //可以通过 return null 来控制定时任务是否继续执行，也可以自己手动的控制下一次执行的时间
+//            if (true) {
+//                return null;
+//            }
+
             //遵循cornTrigger规则
             String cron = "0/5 * * * * ?";
             CronTrigger cronTrigger = new CronTrigger(cron);
