@@ -25,6 +25,10 @@ public class UserDao {
         return userMapper.getUserDataByName(name);
     }
 
+    public List<Map> getUserPartDataListByName(String name) {
+        return userMapper.getUserDataListByName(name);
+    }
+
     public void updateUserEmailByName(String name, String email) {
         userMapper.updateUserEmailByName(name, email);
     }
