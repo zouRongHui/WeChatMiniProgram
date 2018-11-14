@@ -2,11 +2,13 @@ package org.rone.study.springBoot.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.rone.study.springBoot.async.AsyncTest;
 import org.rone.study.springBoot.model.Result;
 import org.rone.study.springBoot.model.User;
 import org.rone.study.springBoot.model.ViewLog;
 import org.rone.study.springBoot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -17,10 +19,20 @@ import java.util.Date;
 @RestController
 @RequestMapping("/test")
 @Api(value = "测试接口", description = "测试Demo")
+@EnableAsync
 public class TestController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AsyncTest asyncTest;
+
+    @RequestMapping(value = "/asyncTest")
+    @ApiOperation(value = "异步线程", notes = "异步线程的请求测试")
+    public Result<?> testAsync() {
+        asyncTest.test();
+        return Result.success();
+    }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ApiOperation(value = "纯测试请求", notes = "仅仅是为了测试请求是否能通")
