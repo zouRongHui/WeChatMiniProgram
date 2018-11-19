@@ -30,7 +30,17 @@ public class TestController {
     @RequestMapping(value = "/asyncTest")
     @ApiOperation(value = "异步线程", notes = "异步线程的请求测试")
     public Result<?> testAsync() {
-        asyncTest.test();
+        int length = 30;
+        for (int i = 0; i < length; i++) {
+            System.out.println(i + " 主线程调用....");
+            asyncTest.test(i);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(i + " 调用完成....");
+        }
         return Result.success();
     }
 

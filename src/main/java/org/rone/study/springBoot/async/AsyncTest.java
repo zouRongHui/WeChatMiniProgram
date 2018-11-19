@@ -11,11 +11,11 @@ public class AsyncTest {
      * 调用类需添加@EnableAsync
      */
     @Async
-    public void test() {
-        System.out.println("子线程名称：" + Thread.currentThread().getName() + "----------");
+    public void test(int i) {
+        System.out.println(i + " 子线程名称：" + Thread.currentThread().getName() + "----------");
         try {
             Thread.sleep(1000 * 10);
-            System.out.println("子线程over.....");
+            System.out.println(i + " 子线程over.....");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
