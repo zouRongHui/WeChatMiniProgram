@@ -11,7 +11,13 @@ import java.util.Date;
 @Component
 public class EasyJob {
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    /**
+     * 支持以下形式定时
+     * 1. cron = "0/5 * * * * ?"    cron表达式
+     * 2. fixedDelay = 1000*10      该任务执行完后间隔10s后再次执行
+     * 3. fixedRate = 1000*10       10s执行一次，如果上个任务完成时已超出此次开始的时间则立即执行
+     */
+//    @Scheduled(cron = "0/5 * * * * ?")
     public void easyJob() {
         System.out.println("简单的单线程任务" + new Date());
         try {
