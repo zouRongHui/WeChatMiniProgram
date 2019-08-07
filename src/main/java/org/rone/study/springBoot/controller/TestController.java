@@ -47,8 +47,7 @@ public class TestController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ApiOperation(value = "纯测试请求", notes = "仅仅是为了测试请求是否能通")
     public Result<?> test() {
-        return Result.success(new ViewLog("test.", new Date()));
-//        return Result.success("测试请求成功！");
+        return Result.success("测试请求成功！");
     }
 
     @RequestMapping(value = "/getUsers", method = RequestMethod.GET)
@@ -139,6 +138,12 @@ public class TestController {
             e.printStackTrace();
             return Result.fault(e.getMessage(), e);
         }
+    }
+
+    @RequestMapping(value = "/getDate", method = RequestMethod.GET)
+    @ApiOperation(value = "获取时间对象")
+    public Result<?> getDate() {
+        return Result.success(new ViewLog("test.", new Date(), new Date()));
     }
 
 }
