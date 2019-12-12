@@ -1,5 +1,6 @@
 package org.rone.study.springBoot.utils;
 
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,8 +13,8 @@ import java.util.concurrent.Executors;
  * 41bit，时间戳，精确到毫秒；
  * 5bit，数据中心ID(datacenterId)；
  * 5bit，工作节点ID(workerId)；
- * 12bit，序列号。
- *
+ * 12bit，序列号，毫秒并发4096条记录。
+ *  0   00001010110100010011110111111100101010110   00000    00001   000000000000
  */
 public class IdGenerator {
 
@@ -162,12 +163,14 @@ public class IdGenerator {
 
     public static void main(String[] args) {
         final IdGenerator idGenerator = new IdGenerator(1, 1);
+//        for (int i = 0; i < 100; i++) {
+//            System.out.println(String.format("%tL", new Date()) + ": " + idGenerator.nextId());
+//        }
         //线程池并行执行10000次ID生成
-        ExecutorService executorService = Executors.newCachedThreadPool();;
-        for (int i = 0; i < 10; i++) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        for (int i = 0; i < 100; i++) {
             executorService.execute(() -> {
-                long id = idGenerator.nextId();
-                System.out.println(id);
+                System.out.println(String.format("%tL", new Date()) + ": " + idGenerator.nextId());
             });
         }
         executorService.shutdown();
