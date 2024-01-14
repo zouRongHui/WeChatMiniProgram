@@ -1,2 +1,37 @@
 server:
   port: 9001
+
+spring:
+  ## freemarker模板
+  freemarker:
+    template-loader-path: classpath:/templates
+    cache: false
+    charset: utf-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: request
+    suffix: .ftl
+  mvc:
+    static-path-pattern: /**
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: -1
+      max-request-size: -1
+  ## 数据源
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@10.129.140.43:1521:orcl
+#    username: MSSP
+#    password: MSSP
+    url: jdbc:oracle:thin:@10.129.140.151:1521/ORCL
+    username: czcb_admin
+    password: ea6h4qjv
+
+logging:
+  config: classpath:logback.xml
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml

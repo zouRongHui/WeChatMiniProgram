@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.MenuInfoMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.MenuInfo">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="PARENT_ID" jdbcType="DECIMAL" property="parentId" />
+    <result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+    <result column="MENU_ICON" jdbcType="VARCHAR" property="menuIcon" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="DELETED" jdbcType="VARCHAR" property="deleted" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.MenuInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ADMIN_MENU_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ADMIN_MENU_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ADMIN_MENU_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.rone.entity.MenuInfoCriteria">
+    delete from ADMIN_MENU_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.MenuInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_MENU_ID.currval from dual
+    </selectKey>
+    insert into ADMIN_MENU_INFO (PARENT_ID, MENU_NAME, MENU_ICON, 
+      URL, DELETED, CREATE_TIME, 
+      UPDATE_TIME)
+    values (#{parentId,jdbcType=DECIMAL}, #{menuName,jdbcType=VARCHAR}, #{menuIcon,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{deleted,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.MenuInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_MENU_ID.currval from dual
+    </selectKey>
+    insert into ADMIN_MENU_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="menuName != null">
+        MENU_NAME,
+      </if>
+      <if test="menuIcon != null">
+        MENU_ICON,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="deleted != null">
+        DELETED,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="menuName != null">
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIcon != null">
+        #{menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.MenuInfoCriteria" resultType="java.lang.Integer">
+    select count(*) from ADMIN_MENU_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ADMIN_MENU_INFO
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.parentId != null">
+        PARENT_ID = #{record.parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.menuName != null">
+        MENU_NAME = #{record.menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuIcon != null">
+        MENU_ICON = #{record.menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        URL = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleted != null">
+        DELETED = #{record.deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ADMIN_MENU_INFO
+    set ID = #{record.id,jdbcType=DECIMAL},
+      PARENT_ID = #{record.parentId,jdbcType=DECIMAL},
+      MENU_NAME = #{record.menuName,jdbcType=VARCHAR},
+      MENU_ICON = #{record.menuIcon,jdbcType=VARCHAR},
+      URL = #{record.url,jdbcType=VARCHAR},
+      DELETED = #{record.deleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rone.entity.MenuInfo">
+    update ADMIN_MENU_INFO
+    <set>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      </if>
+      <if test="menuName != null">
+        MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIcon != null">
+        MENU_ICON = #{menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        DELETED = #{deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rone.entity.MenuInfo">
+    update ADMIN_MENU_INFO
+    set PARENT_ID = #{parentId,jdbcType=DECIMAL},
+      MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      MENU_ICON = #{menuIcon,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      DELETED = #{deleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+
+  <resultMap extends="BaseResultMap" id="RootCollectionMap" type="com.rone.entity.MenuInfo">
+    <collection column="ID" javaType="java.util.ArrayList" ofType="com.rone.entity.MenuInfo" property="childList" select="getRootChildMenu" />
+  </resultMap>
+
+  <select id="getRootTreeMenu" resultMap="RootCollectionMap">
+      select ID,PARENT_ID,MENU_NAME,m.MENU_ICON,URL,DELETED,CREATE_TIME,UPDATE_TIME from ADMIN_MENU_INFO where DELETED = '0' and PARENT_ID = 0
+  </select>
+
+  <select id="getRootChildMenu" resultMap="RootCollectionMap">
+      select ID,PARENT_ID,MENU_NAME,m.MENU_ICON,URL,DELETED,CREATE_TIME,UPDATE_TIME from ADMIN_MENU_INFO where DELETED = '0' and PARENT_ID = #{id}
+  </select>
+
+
+  <resultMap extends="BaseResultMap" id="RoleCollectionMap" type="com.rone.entity.MenuInfo">
+    <result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+    <collection column="{id=ID,roleId=ROLE_ID}" javaType="java.util.ArrayList" ofType="com.rone.entity.MenuInfo" property="childList" select="getRloeChildMenu" />
+  </resultMap>
+
+  <select id="getRoleTreeMenu" resultMap="RoleCollectionMap">
+      select m.ID,m.PARENT_ID,m.MENU_NAME,m.MENU_ICON,m.URL,m.DELETED,m.CREATE_TIME,m.UPDATE_TIME,rm.ROLE_ID from ADMIN_MENU_INFO m
+          left join ADMIN_ROLE_MENU rm on m.ID = rm.MENU_ID
+          left join ADMIN_ROLE_INFO r on r.ID = rm.ROLE_ID
+    where m.DELETED = '0' and r.ID = #{roleId} and m.PARENT_ID = 0 order by m.ID
+  </select>
+
+  <select id="getRloeChildMenu" resultMap="RoleCollectionMap">
+    select m.ID,m.PARENT_ID,m.MENU_NAME,m.MENU_ICON,m.URL,m.DELETED,m.CREATE_TIME,m.UPDATE_TIME,rm.ROLE_ID from ADMIN_MENU_INFO m
+          left join ADMIN_ROLE_MENU rm on m.ID = rm.MENU_ID
+          left join ADMIN_ROLE_INFO r on r.ID = rm.ROLE_ID
+    where m.DELETED = '0' and r.ID = #{roleId} and m.PARENT_ID = #{id}
+  </select>
+
+  <resultMap id="TreeMap" type="com.rone.entity.MenuTreeInfo">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="MENU_NAME" jdbcType="VARCHAR" property="title" />
+    <collection column="ID" javaType="java.util.ArrayList" ofType="com.rone.entity.MenuTreeInfo" property="children" select="getChildren" />
+  </resultMap>
+
+  <select id="getTree" resultMap="TreeMap">
+     select ID,MENU_NAME from ADMIN_MENU_INFO where DELETED = 0 and PARENT_ID = 0
+  </select>
+
+  <select id="getChildren" resultMap="TreeMap">
+    select ID,MENU_NAME from ADMIN_MENU_INFO where DELETED = 0 and PARENT_ID = #{id}
+  </select>
+
+  <select id="getPermissionCodeByRole" resultType="java.lang.String">
+    select t1.PERMISSION_CODE from ADMIN_MENU_INFO t1 where exists(select 1 from ADMIN_ROLE_MENU t2 where t1.ID=t2.MENU_ID and t2.ROLE_ID=#{roleId})
+  </select>
+</mapper>

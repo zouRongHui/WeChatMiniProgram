@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.AdminUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.AdminUserInfo">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="STARTED" jdbcType="VARCHAR" property="started" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="TEMP_LOCK_INVALID_TIME" jdbcType="TIMESTAMP" property="tempLockInvalidTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, USER_NAME, ACCOUNT, PASSWORD, ROLE_ID, STARTED, CREATE_TIME, UPDATE_TIME, STATUS, TEMP_LOCK_INVALID_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.AdminUserInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ADMIN_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ADMIN_USER_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ADMIN_USER_INFO
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.rone.entity.AdminUserInfoCriteria">
+    delete from ADMIN_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.AdminUserInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_USER_ID.currval from dual
+    </selectKey>
+    insert into ADMIN_USER_INFO (USER_NAME, ACCOUNT, PASSWORD, 
+      ROLE_ID, STARTED, CREATE_TIME, 
+      UPDATE_TIME, STATUS, TEMP_LOCK_INVALID_TIME)
+    values (#{userName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=DECIMAL}, #{started,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{tempLockInvalidTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.AdminUserInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_USER_ID.currval from dual
+    </selectKey>
+    insert into ADMIN_USER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+      <if test="started != null">
+        STARTED,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="tempLockInvalidTime != null">
+        TEMP_LOCK_INVALID_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=DECIMAL},
+      </if>
+      <if test="started != null">
+        #{started,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="tempLockInvalidTime != null">
+        #{tempLockInvalidTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.AdminUserInfoCriteria" resultType="java.lang.Integer">
+    select count(*) from ADMIN_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ADMIN_USER_INFO
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userName != null">
+        USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null">
+        ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleId != null">
+        ROLE_ID = #{record.roleId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.started != null">
+        STARTED = #{record.started,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tempLockInvalidTime != null">
+        TEMP_LOCK_INVALID_TIME = #{record.tempLockInvalidTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ADMIN_USER_INFO
+    set ID = #{record.id,jdbcType=DECIMAL},
+      USER_NAME = #{record.userName,jdbcType=VARCHAR},
+      ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      ROLE_ID = #{record.roleId,jdbcType=DECIMAL},
+      STARTED = #{record.started,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      TEMP_LOCK_INVALID_TIME = #{record.tempLockInvalidTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rone.entity.AdminUserInfo">
+    update ADMIN_USER_INFO
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        ROLE_ID = #{roleId,jdbcType=DECIMAL},
+      </if>
+      <if test="started != null">
+        STARTED = #{started,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+        TEMP_LOCK_INVALID_TIME = #{tempLockInvalidTime,jdbcType=TIMESTAMP},
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rone.entity.AdminUserInfo">
+    update ADMIN_USER_INFO
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      ACCOUNT = #{account,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      ROLE_ID = #{roleId,jdbcType=DECIMAL},
+      STARTED = #{started,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=VARCHAR},
+      TEMP_LOCK_INVALID_TIME = #{tempLockInvalidTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <select id="getPageList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select t.id,
+       t.user_name,
+       t.account,
+       t.password,
+       t.role_id,
+       t.started,
+       t.create_time,
+       t.update_time,
+       r.role_name
+    from admin_user_info t left join admin_role_info r
+      on r.id = t.role_id
+      where 1 = 1
+      <if test="userName != null">
+        and t.user_name like '%${userName}%'
+      </if>
+      order by t.create_time desc
+  </select>
+
+  <insert id="insertLoginLog" parameterType="com.rone.entity.AdminLoginLog">
+    insert into ADMIN_LOGIN_LOG (LOGIN_ACCOUNT, SESSION_ID, LOGIN_TIME,
+      LOGIN_IP, LOGIN_STATUS, LOGIN_FAIL_MESSAGE
+      )
+    values (#{loginAccount,jdbcType=VARCHAR}, #{sessionId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},
+      #{loginIp,jdbcType=VARCHAR}, #{loginStatus,jdbcType=VARCHAR}, #{loginFailMessage,jdbcType=VARCHAR}
+      )
+  </insert>
+  <resultMap id="AdminLoginLogMap" type="com.rone.entity.AdminLoginLog">
+    <result column="LOGIN_ACCOUNT" jdbcType="VARCHAR" property="loginAccount" />
+    <result column="SESSION_ID" jdbcType="VARCHAR" property="sessionId" />
+    <result column="LOGIN_TIME" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="LOGIN_IP" jdbcType="VARCHAR" property="loginIp" />
+    <result column="LOGIN_STATUS" jdbcType="VARCHAR" property="loginStatus" />
+    <result column="LOGIN_FAIL_MESSAGE" jdbcType="VARCHAR" property="loginFailMessage" />
+  </resultMap>
+  <select id="getFailLoginLogInTime" resultMap="AdminLoginLogMap">
+    select LOGIN_ACCOUNT, SESSION_ID, LOGIN_TIME, LOGIN_IP, LOGIN_STATUS, LOGIN_FAIL_MESSAGE
+    from ADMIN_LOGIN_LOG where LOGIN_ACCOUNT=#{account,jdbcType=VARCHAR} and LOGIN_STATUS='1' and LOGIN_TIME >= #{time,jdbcType=TIMESTAMP} order by LOGIN_TIME
+  </select>
+
+</mapper>

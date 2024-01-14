@@ -9,7 +9,9 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>manage</artifactId>
+    <groupId>com.rone</groupId>
+    <artifactId>common</artifactId>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,11 +20,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.rone</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
