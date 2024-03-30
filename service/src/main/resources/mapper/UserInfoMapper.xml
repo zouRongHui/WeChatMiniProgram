@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.UserInfo">
+    <id column="WUI_CUST_NO" jdbcType="VARCHAR" property="wuiCustNo" />
+    <!-- <result column="WUI_CERT_TYPE" jdbcType="VARCHAR" property="wuiCertType" /> -->
+    <!-- <result column="WUI_CERT_NO" jdbcType="VARCHAR" property="wuiCertNo" /> -->
+    <!-- <result column="WUI_CUST_NAME" jdbcType="VARCHAR" property="wuiCustName" /> -->
+    <result column="WUI_OPENID" jdbcType="VARCHAR" property="wuiOpenid" />
+    <result column="WUI_MOBILE_NO" jdbcType="VARCHAR" property="wuiMobileNo" />
+    <result column="WUI_STATUS" jdbcType="VARCHAR" property="wuiStatus" />
+    <result column="WUI_REGISTER_TIME" jdbcType="TIMESTAMP" property="wuiRegisterTime" />
+    <result column="WUI_UNIONID" jdbcType="VARCHAR" property="wuiUnionid" />
+    <result column="USER_TYPE" jdbcType="DECIMAL" property="userType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    WUI_CUST_NO, WUI_OPENID, WUI_MOBILE_NO,
+    WUI_STATUS, WUI_REGISTER_TIME, WUI_UNIONID, USER_TYPE
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.UserInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WD_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from WD_USER_INFO
+    where WUI_CUST_NO = #{wuiCustNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from WD_USER_INFO
+    where WUI_CUST_NO = #{wuiCustNo,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.rone.entity.UserInfoCriteria">
+    delete from WD_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.UserInfo">
+    <selectKey keyProperty="wuiCustNo" order="AFTER" resultType="java.lang.String">
+      select to_char(S_WD_CUST_NO.nextval,'fm0000000000') from dual
+    </selectKey>
+    insert into WD_USER_INFO (WUI_OPENID, WUI_MOBILE_NO, WUI_STATUS,
+    WUI_REGISTER_TIME, WUI_UNIONID, USER_TYPE)
+    values (#{wuiOpenid,jdbcType=VARCHAR}, #{wuiMobileNo,jdbcType=VARCHAR}, #{wuiStatus,jdbcType=VARCHAR},
+    #{wuiRegisterTime,jdbcType=TIMESTAMP}, #{wuiUnionid,jdbcType=VARCHAR}, #{userType,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.UserInfo">
+    <selectKey keyProperty="wuiCustNo" order="AFTER" resultType="java.lang.String">
+      select to_char(S_WD_CUST_NO.currval,'fm0000000000') from dual
+    </selectKey>
+    insert into WD_USER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="wuiOpenid != null">
+        WUI_OPENID,
+      </if>
+      <if test="wuiMobileNo != null">
+        WUI_MOBILE_NO,
+      </if>
+      <if test="wuiStatus != null">
+        WUI_STATUS,
+      </if>
+      <if test="wuiRegisterTime != null">
+        WUI_REGISTER_TIME,
+      </if>
+      <if test="wuiUnionid != null">
+        WUI_UNIONID,
+      </if>
+      <if test="userType != null">
+        USER_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="wuiOpenid != null">
+        #{wuiOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiMobileNo != null">
+        #{wuiMobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiStatus != null">
+        #{wuiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiRegisterTime != null">
+        #{wuiRegisterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wuiUnionid != null">
+        #{wuiUnionid,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.UserInfoCriteria" resultType="java.lang.Long">
+    select count(*) from WD_USER_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WD_USER_INFO
+    <set>
+      <if test="record.wuiCustNo != null">
+        WUI_CUST_NO = #{record.wuiCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wuiOpenid != null">
+        WUI_OPENID = #{record.wuiOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wuiMobileNo != null">
+        WUI_MOBILE_NO = #{record.wuiMobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wuiStatus != null">
+        WUI_STATUS = #{record.wuiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wuiRegisterTime != null">
+        WUI_REGISTER_TIME = #{record.wuiRegisterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.wuiUnionid != null">
+        WUI_UNIONID = #{record.wuiUnionid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null">
+        USER_TYPE = #{record.userType,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WD_USER_INFO
+    set WUI_CUST_NO = #{record.wuiCustNo,jdbcType=VARCHAR},
+      WUI_OPENID = #{record.wuiOpenid,jdbcType=VARCHAR},
+      WUI_MOBILE_NO = #{record.wuiMobileNo,jdbcType=VARCHAR},
+      WUI_STATUS = #{record.wuiStatus,jdbcType=VARCHAR},
+      WUI_REGISTER_TIME = #{record.wuiRegisterTime,jdbcType=TIMESTAMP},
+      WUI_UNIONID = #{record.wuiUnionid,jdbcType=VARCHAR},
+      USER_TYPE = #{record.userType,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rone.entity.UserInfo">
+    update WD_USER_INFO
+    <set>
+      <if test="wuiOpenid != null">
+        WUI_OPENID = #{wuiOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiMobileNo != null">
+        WUI_MOBILE_NO = #{wuiMobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiStatus != null">
+        WUI_STATUS = #{wuiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wuiRegisterTime != null">
+        WUI_REGISTER_TIME = #{wuiRegisterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wuiUnionid != null">
+        WUI_UNIONID = #{wuiUnionid,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        USER_TYPE = #{userType,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where WUI_CUST_NO = #{wuiCustNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rone.entity.UserInfo">
+    update WD_USER_INFO
+    set WUI_OPENID = #{wuiOpenid,jdbcType=VARCHAR},
+      WUI_MOBILE_NO = #{wuiMobileNo,jdbcType=VARCHAR},
+      WUI_STATUS = #{wuiStatus,jdbcType=VARCHAR},
+      WUI_REGISTER_TIME = #{wuiRegisterTime,jdbcType=TIMESTAMP},
+      WUI_UNIONID = #{wuiUnionid,jdbcType=VARCHAR},
+      USER_TYPE = #{userType,jdbcType=DECIMAL}
+    where WUI_CUST_NO = #{wuiCustNo,jdbcType=VARCHAR}
+  </update>
+
+  <select id="checkMobileUsed" parameterType="map" resultType="java.lang.Long">
+    select count(*) from WD_USER_INFO
+    where WUI_MOBILE_NO = #{mobileNo,jdbcType=VARCHAR}
+    and WUI_STATUS &lt;&gt; #{exceptStatus,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateUserToken" parameterType="map">
+    update WD_USER_TOKEN
+    set
+      USER_TOKEN = #{userToken,jdbcType=VARCHAR},
+      SESSION_ID = #{sessionId,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      EXPIRE_TIME = #{expireTime,jdbcType=TIMESTAMP},
+      SERVER_IP = #{serverIp,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertUserToken" parameterType="map">
+    insert into WD_USER_TOKEN (USER_ID, USER_TOKEN, SESSION_ID, CREATE_TIME, EXPIRE_TIME, SERVER_IP)
+    values (#{userId,jdbcType=VARCHAR}, #{userToken,jdbcType=VARCHAR}, #{sessionId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{expireTime,jdbcType=TIMESTAMP}, #{serverIp,jdbcType=VARCHAR})
+  </insert>
+  <resultMap id="UserTokenResultMap" type="com.rone.entity.UserToken">
+    <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="USER_TOKEN" jdbcType="VARCHAR" property="userToken" />
+    <result column="SESSION_ID" jdbcType="VARCHAR" property="sessionId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="EXPIRE_TIME" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="SERVER_IP" jdbcType="VARCHAR" property="serverIp" />
+  </resultMap>
+  <select id="selectSingleUserToken" parameterType="java.lang.String" resultMap="UserTokenResultMap">
+    select USER_ID, USER_TOKEN, SESSION_ID, CREATE_TIME, EXPIRE_TIME, SERVER_IP
+    from WD_USER_TOKEN
+    where USER_TOKEN = #{userToken,jdbcType=VARCHAR}
+  </select>
+  <update id="refreshUserToken" parameterType="map">
+    update WD_USER_TOKEN
+    set
+      EXPIRE_TIME = #{expireTime,jdbcType=TIMESTAMP}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>

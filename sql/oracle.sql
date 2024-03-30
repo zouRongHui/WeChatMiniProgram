@@ -180,6 +180,137 @@ END;
 INSERT INTO ADMIN_USER_INFO (ID, USER_NAME, ACCOUNT, PASSWORD, ROLE_ID, STARTED, CREATE_TIME, UPDATE_TIME, STATUS, TEMP_LOCK_INVALID_TIME) VALUES (1, '超级管理员', 'admin', 'h2qvSqkx49k=', 1, '1', sysdate, null, '0', null);
 
 
+------------------------------------------------------------------------------------------------------------------------
+create table WD_LOGON_CONTROL
+(
+    WLC_LOGON_SEQ        VARCHAR2(20),
+    WLC_CUST_NO          VARCHAR2(10),
+    WLC_LOGON_TYPE       VARCHAR2(1),
+    WLC_OPENID           VARCHAR2(60),
+    WLC_SESSION_KEY      VARCHAR2(60),
+    WLC_SESSIONID        VARCHAR2(60),
+    WLC_LOGON_TIME       TIMESTAMP(6),
+    WLC_LOGON_IP         VARCHAR2(60),
+    WLC_LAST_LOGON_TIME  TIMESTAMP(6),
+    WLC_LAST_LOGON_IP    VARCHAR2(60),
+    WLC_LOGON_STATUS     VARCHAR2(1),
+    WLC_FAIL_MSG         VARCHAR2(200),
+    WLC_DAY_FAIL_TIMES   NUMBER(10) default 0,
+    WLC_TOTAL_FAIL_TIMES NUMBER(10) default 0
+);
+comment on table WD_LOGON_CONTROL is '微店小程序登录控制表';
+comment on column WD_LOGON_CONTROL.WLC_LOGON_SEQ is 'YYYYMMDD+12位序号';
+comment on column WD_LOGON_CONTROL.WLC_CUST_NO is '客户编号';
+comment on column WD_LOGON_CONTROL.WLC_LOGON_TYPE is '1:手机验证码；2:指纹';
+comment on column WD_LOGON_CONTROL.WLC_OPENID is '微信OPENID';
+comment on column WD_LOGON_CONTROL.WLC_SESSION_KEY is '微信登录会话密钥';
+comment on column WD_LOGON_CONTROL.WLC_SESSIONID is '会话id';
+comment on column WD_LOGON_CONTROL.WLC_LOGON_TIME is '登录时间';
+comment on column WD_LOGON_CONTROL.WLC_LOGON_IP is '登录IP';
+comment on column WD_LOGON_CONTROL.WLC_LAST_LOGON_TIME is '上次登录时间';
+comment on column WD_LOGON_CONTROL.WLC_LAST_LOGON_IP is '上次登录IP';
+comment on column WD_LOGON_CONTROL.WLC_LOGON_STATUS is '登录状态 0:成功；2:失败';
+comment on column WD_LOGON_CONTROL.WLC_FAIL_MSG is '登录失败信息';
+comment on column WD_LOGON_CONTROL.WLC_DAY_FAIL_TIMES is '当日失败次数';
+comment on column WD_LOGON_CONTROL.WLC_TOTAL_FAIL_TIMES is '累计失败次数';
+create index WD_LCWO_INDEX on WD_LOGON_CONTROL (WLC_OPENID);
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_SEND_SMS_FLOW
+(
+    SEQ       VARCHAR2(20),
+    SMS_TYPE  VARCHAR2(3),
+    IP        VARCHAR2(200),
+    MOBILE_NO VARCHAR2(20),
+    TIME      TIMESTAMP(6),
+    CONTENT   VARCHAR2(4000)
+);
+comment on table WD_SEND_SMS_FLOW is '短信发送流水';
+comment on column WD_SEND_SMS_FLOW.SEQ is '流水号';
+comment on column WD_SEND_SMS_FLOW.SMS_TYPE is '短信类型，0:其他;1:验证码';
+comment on column WD_SEND_SMS_FLOW.IP is '请求发送短信的ip';
+comment on column WD_SEND_SMS_FLOW.MOBILE_NO is '手机号';
+comment on column WD_SEND_SMS_FLOW.TIME is '发送时间';
+comment on column WD_SEND_SMS_FLOW.CONTENT is '短信内容';
+create index WD_SSFIT_INDEX on WD_SEND_SMS_FLOW (IP, TIME);
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_USER_INFO
+(
+    WUI_CUST_NO            VARCHAR2(10) not null
+        primary key,
+    WUI_CERT_TYPE          VARCHAR2(8),
+    WUI_CERT_NO            VARCHAR2(60),
+    WUI_CUST_NAME          VARCHAR2(100),
+    WUI_OPENID             VARCHAR2(60),
+    WUI_MOBILE_NO          VARCHAR2(11),
+    WUI_STATUS             VARCHAR2(2),
+    WUI_REGISTER_TIME      TIMESTAMP(6),
+    WUI_UNIONID            VARCHAR2(60),
+    WUI_AUTH_MODE          VARCHAR2(10) default '1000000000',
+    WUI_CORE_CUST_NO       VARCHAR2(60),
+    WUI_LEGAL_NO           VARCHAR2(16),
+    WUI_DEFAULT_ACCOUNT_NO VARCHAR2(60),
+    WUI_LINK_MAN_NO        VARCHAR2(20),
+    ORG_NO                 VARCHAR2(16),
+    BRANCH_NO              VARCHAR2(16),
+    USER_TYPE              NUMBER(4),
+    CUST_SOURCE            NUMBER(2),
+    SOURCE_RIGHTS_ID       NUMBER(10)
+);
+comment on table WD_USER_INFO is '微店小程序用户信息表';
+comment on column WD_USER_INFO.WUI_CUST_NO is '客户编号';
+comment on column WD_USER_INFO.WUI_CERT_TYPE is '证件类型';
+comment on column WD_USER_INFO.WUI_CERT_NO is '证件号码';
+comment on column WD_USER_INFO.WUI_CUST_NAME is '客户姓名';
+comment on column WD_USER_INFO.WUI_OPENID is '微信OPENID';
+comment on column WD_USER_INFO.WUI_MOBILE_NO is '手机号码';
+comment on column WD_USER_INFO.WUI_STATUS is '用户状态 00:正常；01:临时锁定；02:永久锁定；03:注销；';
+comment on column WD_USER_INFO.WUI_REGISTER_TIME is '注册时间';
+comment on column WD_USER_INFO.WUI_UNIONID is '微信UNIONID';
+comment on column WD_USER_INFO.WUI_AUTH_MODE is '第一位:手机验证码（必须开启，默认开启，不可取消）；第二位1100000000:指纹';
+comment on column WD_USER_INFO.WUI_CORE_CUST_NO is '核心客户号';
+comment on column WD_USER_INFO.WUI_LEGAL_NO is '法人机构号';
+comment on column WD_USER_INFO.WUI_DEFAULT_ACCOUNT_NO is '默认关联的账户(卡)';
+comment on column WD_USER_INFO.WUI_LINK_MAN_NO is '推荐注册的客户经理工号';
+comment on column WD_USER_INFO.ORG_NO is '开卡支行号';
+comment on column WD_USER_INFO.BRANCH_NO is '开卡分行号';
+comment on column WD_USER_INFO.USER_TYPE is '用户类型，详见 com.sunyard.enumeration.UserInfoTypeEnum ';
+comment on column WD_USER_INFO.CUST_SOURCE is '客户来源';
+comment on column WD_USER_INFO.SOURCE_RIGHTS_ID is '来源自权益的用户，关联的权益id';
+create sequence S_WD_CUST_NO;
+create trigger WD_USER_INFO_TRIGGER
+    before insert
+    on WD_USER_INFO
+    for each row
+BEGIN
+    SELECT TO_CHAR(S_WD_CUST_NO.NEXTVAL, 'FM0000000000') INTO :NEW.WUI_CUST_NO FROM DUAL;
+END;
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_USER_TOKEN
+(
+    USER_ID     VARCHAR2(32) not null
+        constraint WD_USER_TOKEN_PK
+            primary key,
+    USER_TOKEN  VARCHAR2(32),
+    SESSION_ID  VARCHAR2(64),
+    CREATE_TIME TIMESTAMP(6),
+    EXPIRE_TIME TIMESTAMP(6),
+    SERVER_IP   VARCHAR2(16)
+);
+comment on table WD_USER_TOKEN is '用户Token表';
+comment on column WD_USER_TOKEN.USER_ID is '用户ID';
+comment on column WD_USER_TOKEN.USER_TOKEN is '用户Token';
+comment on column WD_USER_TOKEN.SESSION_ID is '申请Token时的sessionId';
+comment on column WD_USER_TOKEN.CREATE_TIME is 'Token签发时间';
+comment on column WD_USER_TOKEN.EXPIRE_TIME is 'Token失效时间';
+comment on column WD_USER_TOKEN.SERVER_IP is '服务器IP';
+create index WD_USER_TOKEN_USER_TOKEN_INDEX on WD_USER_TOKEN (USER_TOKEN);
+
 
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
@@ -190,9 +321,14 @@ INSERT INTO ADMIN_USER_INFO (ID, USER_NAME, ACCOUNT, PASSWORD, ROLE_ID, STARTED,
 -- drop table ADMIN_ROLE_MENU;
 -- drop table ADMIN_SYS_PARAMS;
 -- drop table ADMIN_USER_INFO;
+-- drop table WD_LOGON_CONTROL;
+-- drop table WD_SEND_SMS_FLOW;
+-- drop table WD_USER_INFO;
+-- drop table WD_USER_TOKEN;
 --
 -- drop sequence S_ROLE_ID;
 -- drop sequence S_ROLE_MENU_ID;
 -- drop sequence S_SYS_PARAMS_ID;
 -- drop sequence S_USER_ID;
+-- drop sequence S_WD_CUST_NO;
 

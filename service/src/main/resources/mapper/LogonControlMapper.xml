@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.LogonControlMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.LogonControl">
+    <result column="WLC_LOGON_SEQ" jdbcType="VARCHAR" property="wlcLogonSeq" />
+    <result column="WLC_CUST_NO" jdbcType="VARCHAR" property="wlcCustNo" />
+    <result column="WLC_LOGON_TYPE" jdbcType="VARCHAR" property="wlcLogonType" />
+    <result column="WLC_OPENID" jdbcType="VARCHAR" property="wlcOpenid" />
+    <result column="WLC_SESSION_KEY" jdbcType="VARCHAR" property="wlcSessionKey" />
+    <result column="WLC_SESSIONID" jdbcType="VARCHAR" property="wlcSessionid" />
+    <result column="WLC_LOGON_TIME" jdbcType="TIMESTAMP" property="wlcLogonTime" />
+    <result column="WLC_LOGON_IP" jdbcType="VARCHAR" property="wlcLogonIp" />
+    <result column="WLC_LAST_LOGON_TIME" jdbcType="TIMESTAMP" property="wlcLastLogonTime" />
+    <result column="WLC_LAST_LOGON_IP" jdbcType="VARCHAR" property="wlcLastLogonIp" />
+    <result column="WLC_LOGON_STATUS" jdbcType="VARCHAR" property="wlcLogonStatus" />
+    <result column="WLC_FAIL_MSG" jdbcType="VARCHAR" property="wlcFailMsg" />
+    <result column="WLC_DAY_FAIL_TIMES" jdbcType="DECIMAL" property="wlcDayFailTimes" />
+    <result column="WLC_TOTAL_FAIL_TIMES" jdbcType="DECIMAL" property="wlcTotalFailTimes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    WLC_LOGON_SEQ, WLC_CUST_NO, WLC_LOGON_TYPE, WLC_OPENID, WLC_SESSION_KEY, WLC_SESSIONID,
+    WLC_LOGON_TIME, WLC_LOGON_IP, WLC_LAST_LOGON_TIME, WLC_LAST_LOGON_IP, WLC_LOGON_STATUS,
+    WLC_FAIL_MSG, WLC_DAY_FAIL_TIMES, WLC_TOTAL_FAIL_TIMES
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.LogonControlCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WD_LOGON_CONTROL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.rone.entity.LogonControlCriteria">
+    delete from WD_LOGON_CONTROL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.LogonControl">
+    insert into WD_LOGON_CONTROL (WLC_LOGON_SEQ, WLC_CUST_NO, WLC_LOGON_TYPE,
+      WLC_OPENID, WLC_SESSION_KEY, WLC_SESSIONID,
+      WLC_LOGON_TIME, WLC_LOGON_IP, WLC_LAST_LOGON_TIME,
+      WLC_LAST_LOGON_IP, WLC_LOGON_STATUS, WLC_FAIL_MSG,
+      WLC_DAY_FAIL_TIMES, WLC_TOTAL_FAIL_TIMES)
+    values (#{wlcLogonSeq,jdbcType=VARCHAR}, #{wlcCustNo,jdbcType=VARCHAR}, #{wlcLogonType,jdbcType=VARCHAR},
+      #{wlcOpenid,jdbcType=VARCHAR}, #{wlcSessionKey,jdbcType=VARCHAR}, #{wlcSessionid,jdbcType=VARCHAR},
+      #{wlcLogonTime,jdbcType=TIMESTAMP}, #{wlcLogonIp,jdbcType=VARCHAR}, #{wlcLastLogonTime,jdbcType=TIMESTAMP},
+      #{wlcLastLogonIp,jdbcType=VARCHAR}, #{wlcLogonStatus,jdbcType=VARCHAR}, #{wlcFailMsg,jdbcType=VARCHAR},
+      #{wlcDayFailTimes,jdbcType=DECIMAL}, #{wlcTotalFailTimes,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.LogonControl">
+    insert into WD_LOGON_CONTROL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="wlcLogonSeq != null">
+        WLC_LOGON_SEQ,
+      </if>
+      <if test="wlcCustNo != null">
+        WLC_CUST_NO,
+      </if>
+      <if test="wlcLogonType != null">
+        WLC_LOGON_TYPE,
+      </if>
+      <if test="wlcOpenid != null">
+        WLC_OPENID,
+      </if>
+      <if test="wlcSessionKey != null">
+        WLC_SESSION_KEY,
+      </if>
+      <if test="wlcSessionid != null">
+        WLC_SESSIONID,
+      </if>
+      <if test="wlcLogonTime != null">
+        WLC_LOGON_TIME,
+      </if>
+      <if test="wlcLogonIp != null">
+        WLC_LOGON_IP,
+      </if>
+      <if test="wlcLastLogonTime != null">
+        WLC_LAST_LOGON_TIME,
+      </if>
+      <if test="wlcLastLogonIp != null">
+        WLC_LAST_LOGON_IP,
+      </if>
+      <if test="wlcLogonStatus != null">
+        WLC_LOGON_STATUS,
+      </if>
+      <if test="wlcFailMsg != null">
+        WLC_FAIL_MSG,
+      </if>
+      <if test="wlcDayFailTimes != null">
+        WLC_DAY_FAIL_TIMES,
+      </if>
+      <if test="wlcTotalFailTimes != null">
+        WLC_TOTAL_FAIL_TIMES,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="wlcLogonSeq != null">
+        #{wlcLogonSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcCustNo != null">
+        #{wlcCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcLogonType != null">
+        #{wlcLogonType,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcOpenid != null">
+        #{wlcOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcSessionKey != null">
+        #{wlcSessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcSessionid != null">
+        #{wlcSessionid,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcLogonTime != null">
+        #{wlcLogonTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wlcLogonIp != null">
+        #{wlcLogonIp,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcLastLogonTime != null">
+        #{wlcLastLogonTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wlcLastLogonIp != null">
+        #{wlcLastLogonIp,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcLogonStatus != null">
+        #{wlcLogonStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcFailMsg != null">
+        #{wlcFailMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="wlcDayFailTimes != null">
+        #{wlcDayFailTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="wlcTotalFailTimes != null">
+        #{wlcTotalFailTimes,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.LogonControlCriteria" resultType="java.lang.Long">
+    select count(*) from WD_LOGON_CONTROL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WD_LOGON_CONTROL
+    <set>
+      <if test="record.wlcLogonSeq != null">
+        WLC_LOGON_SEQ = #{record.wlcLogonSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcCustNo != null">
+        WLC_CUST_NO = #{record.wlcCustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcLogonType != null">
+        WLC_LOGON_TYPE = #{record.wlcLogonType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcOpenid != null">
+        WLC_OPENID = #{record.wlcOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcSessionKey != null">
+        WLC_SESSION_KEY = #{record.wlcSessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcSessionid != null">
+        WLC_SESSIONID = #{record.wlcSessionid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcLogonTime != null">
+        WLC_LOGON_TIME = #{record.wlcLogonTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.wlcLogonIp != null">
+        WLC_LOGON_IP = #{record.wlcLogonIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcLastLogonTime != null">
+        WLC_LAST_LOGON_TIME = #{record.wlcLastLogonTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.wlcLastLogonIp != null">
+        WLC_LAST_LOGON_IP = #{record.wlcLastLogonIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcLogonStatus != null">
+        WLC_LOGON_STATUS = #{record.wlcLogonStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcFailMsg != null">
+        WLC_FAIL_MSG = #{record.wlcFailMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wlcDayFailTimes != null">
+        WLC_DAY_FAIL_TIMES = #{record.wlcDayFailTimes,jdbcType=DECIMAL},
+      </if>
+      <if test="record.wlcTotalFailTimes != null">
+        WLC_TOTAL_FAIL_TIMES = #{record.wlcTotalFailTimes,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WD_LOGON_CONTROL
+    set WLC_LOGON_SEQ = #{record.wlcLogonSeq,jdbcType=VARCHAR},
+      WLC_CUST_NO = #{record.wlcCustNo,jdbcType=VARCHAR},
+      WLC_LOGON_TYPE = #{record.wlcLogonType,jdbcType=VARCHAR},
+      WLC_OPENID = #{record.wlcOpenid,jdbcType=VARCHAR},
+      WLC_SESSION_KEY = #{record.wlcSessionKey,jdbcType=VARCHAR},
+      WLC_SESSIONID = #{record.wlcSessionid,jdbcType=VARCHAR},
+      WLC_LOGON_TIME = #{record.wlcLogonTime,jdbcType=TIMESTAMP},
+      WLC_LOGON_IP = #{record.wlcLogonIp,jdbcType=VARCHAR},
+      WLC_LAST_LOGON_TIME = #{record.wlcLastLogonTime,jdbcType=TIMESTAMP},
+      WLC_LAST_LOGON_IP = #{record.wlcLastLogonIp,jdbcType=VARCHAR},
+      WLC_LOGON_STATUS = #{record.wlcLogonStatus,jdbcType=VARCHAR},
+      WLC_FAIL_MSG = #{record.wlcFailMsg,jdbcType=VARCHAR},
+      WLC_DAY_FAIL_TIMES = #{record.wlcDayFailTimes,jdbcType=DECIMAL},
+      WLC_TOTAL_FAIL_TIMES = #{record.wlcTotalFailTimes,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <select id="selectLastOneByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from (
+      select
+      <include refid="Base_Column_List" />
+      from WD_LOGON_CONTROL
+      where WLC_OPENID = #{openId,jdbcType=VARCHAR}
+      order by WLC_LOGON_TIME desc
+    ) t where rownum = 1
+  </select>
+</mapper>
