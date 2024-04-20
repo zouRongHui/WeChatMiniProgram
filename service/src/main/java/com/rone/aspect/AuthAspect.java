@@ -1,9 +1,12 @@
 package com.rone.aspect;
 
+import com.rone.annotation.BlockUserCheck;
 import com.rone.annotation.NeedLogon;
 import com.rone.annotation.UserTypeValidation;
 import com.rone.constant.HttpSessionAttributeConstant;
+import com.rone.constant.WeChatMemoryCacheData;
 import com.rone.enumeration.UserInfoTypeEnum;
+import com.rone.exception.AuthException;
 import com.rone.exception.SessionDueException;
 import com.rone.exception.RoneException;
 import com.rone.model.LogonUserInfo;
@@ -68,6 +71,27 @@ public class AuthAspect {
                     throw new RoneException("操作失败，请提升您的VIP登记！");
                 }
             }
+
+            if (method.isAnnotationPresent(BlockUserCheck.class)) {
+                blockUserCheck(logonUserInfo);
+            }
+        }
+    }
+
+    /**
+     * 黑名单检查
+     *
+     * @param logonUserInfo
+     * @throws AuthException
+     */
+    private void blockUserCheck(LogonUserInfo logonUserInfo) throws AuthException {
+        String phone = logonUserInfo.getWuiMobileNo();
+        String openId = logonUserInfo.getWuiOpenid();
+        if (WeChatMemoryCacheData.BLOCK_USER_CACHE_DATA.getOpenIdSet().contains(openId)) {
+            throw new AuthException("【微信】操作过频繁！");
+        }
+        if (WeChatMemoryCacheData.BLOCK_USER_CACHE_DATA.getPhoneSet().contains(phone)) {
+            throw new AuthException("【手机号】操作过频繁！");
         }
     }
 

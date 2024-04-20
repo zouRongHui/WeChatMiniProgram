@@ -45,6 +45,7 @@ INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, 
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (2, 1, '用户管理', 'layui-icon-username', '/user/list', '0', sysdate, null, 'ROLE_USER');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (3, 1, '角色管理', 'layui-icon-user', '/role/list', '0', sysdate, null, 'ROLE_ROLE');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (4, 1, '系统参数管理', 'layui-icon-util', '/sysparam/list', '0', sysdate, null, 'ROLE_SYS_PARAM');
+INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (5, 0, '黑名单用户', 'layui-icon-user', '/blockUser/list', '0', sysdate, null, 'ROLE_BLOCK_USER');
 
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -313,6 +314,40 @@ create index WD_USER_TOKEN_USER_TOKEN_INDEX on WD_USER_TOKEN (USER_TOKEN);
 
 
 ------------------------------------------------------------------------------------------------------------------------
+create table WD_BLOCK_USER
+(
+    ID             NUMBER(10) not null
+        constraint WD_BLOCK_USER_PK
+            primary key,
+    CUSTOMER_NAME  VARCHAR2(100),
+    PHONE          VARCHAR2(11),
+    CARD_NO        VARCHAR2(60),
+    CARD_BRANCH    VARCHAR2(16),
+    CARD_SUBBRANCH VARCHAR2(16),
+    OPEN_ID        VARCHAR2(60),
+    RULE           VARCHAR2(128),
+    CREATE_TIME    TIMESTAMP(6),
+    STATUS         VARCHAR2(4),
+    EDIT_TIME      TIMESTAMP(6),
+    CREATOR        VARCHAR2(16)
+);
+comment on table WD_BLOCK_USER is '黑名单';
+comment on column WD_BLOCK_USER.ID is '主键';
+comment on column WD_BLOCK_USER.CUSTOMER_NAME is '姓名';
+comment on column WD_BLOCK_USER.PHONE is '手机号';
+comment on column WD_BLOCK_USER.CARD_NO is '卡号';
+comment on column WD_BLOCK_USER.CARD_BRANCH is '卡所属分行';
+comment on column WD_BLOCK_USER.CARD_SUBBRANCH is '卡所属支行';
+comment on column WD_BLOCK_USER.OPEN_ID is '微信号open_id';
+comment on column WD_BLOCK_USER.RULE is '违反反欺诈规则';
+comment on column WD_BLOCK_USER.CREATE_TIME is '加入黑名单时间';
+comment on column WD_BLOCK_USER.STATUS is '状态，0:未启用;1:启用';
+comment on column WD_BLOCK_USER.EDIT_TIME is '最近修改时间';
+comment on column WD_BLOCK_USER.CREATOR is '添加者';
+create sequence S_WD_BLOCK_USER_ID;
+
+
+------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 -- drop table ADMIN_LOGIN_LOG;
@@ -325,10 +360,12 @@ create index WD_USER_TOKEN_USER_TOKEN_INDEX on WD_USER_TOKEN (USER_TOKEN);
 -- drop table WD_SEND_SMS_FLOW;
 -- drop table WD_USER_INFO;
 -- drop table WD_USER_TOKEN;
+-- drop table WD_BLOCK_USER;
 --
 -- drop sequence S_ROLE_ID;
 -- drop sequence S_ROLE_MENU_ID;
 -- drop sequence S_SYS_PARAMS_ID;
 -- drop sequence S_USER_ID;
 -- drop sequence S_WD_CUST_NO;
+-- drop sequence S_WD_BLOCK_USER_ID;
 
