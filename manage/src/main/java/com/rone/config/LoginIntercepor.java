@@ -48,6 +48,13 @@ public class LoginIntercepor implements HandlerInterceptor {
         permissionMap.put("/sysparam/stop", "ROLE_SYS_PARAM");
         permissionMap.put("/sysparam/start", "ROLE_SYS_PARAM");
         permissionMap.put("/sysparam/delete", "ROLE_SYS_PARAM");
+
+        permissionMap.put("/blockUser/list", "ROLE_BLOCK_USER");
+        permissionMap.put("/blockUser/addView", "ROLE_BLOCK_USER");
+        permissionMap.put("/blockUser/add", "ROLE_BLOCK_USER");
+        permissionMap.put("/blockUser/delete", "ROLE_BLOCK_USER");
+        permissionMap.put("/blockUser/usable", "ROLE_BLOCK_USER");
+        permissionMap.put("/blockUser/disable", "ROLE_BLOCK_USER");
     }
 
     @Override
