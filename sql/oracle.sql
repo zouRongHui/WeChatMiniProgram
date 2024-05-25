@@ -46,6 +46,7 @@ INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, 
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (3, 1, '角色管理', 'layui-icon-user', '/role/list', '0', sysdate, null, 'ROLE_ROLE');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (4, 1, '系统参数管理', 'layui-icon-util', '/sysparam/list', '0', sysdate, null, 'ROLE_SYS_PARAM');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (5, 0, '黑名单用户', 'layui-icon-user', '/blockUser/list', '0', sysdate, null, 'ROLE_BLOCK_USER');
+INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (6, 0, '产品菜单管理', 'layui-icon-list', '/productmenu/list', '0', sysdate, null, 'ROLE_PRODUCT_MENU');
 
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -348,6 +349,96 @@ create sequence S_WD_BLOCK_USER_ID;
 
 
 ------------------------------------------------------------------------------------------------------------------------
+create table APP_PRODUCT_MENU
+(
+    ID                NUMBER(10) not null
+        primary key,
+    MENU_NAME         VARCHAR2(64),
+    PRODUCT_DESC      VARCHAR2(1500),
+    CONSULT_WORK_NO   VARCHAR2(100),
+    BUSINESS_TYPE     VARCHAR2(20),
+    MENU_ICON         VARCHAR2(128)  default NULL,
+    CATEGORY_ID       NUMBER(10),
+    ADVERT_PHOTO      VARCHAR2(128)  default NULL,
+    JUMP_URL          VARCHAR2(100),
+    JUMP_PARAM        VARCHAR2(4000) default NULL,
+    HOLD_URL          VARCHAR2(100),
+    HOLD_PARAM        VARCHAR2(100),
+    FONT_ID           NUMBER(10),
+    SORT              NUMBER(10),
+    DELETED           VARCHAR2(1),
+    CREATE_TIME       TIMESTAMP(6),
+    UPDATE_TIME       TIMESTAMP(6),
+    USABLE            VARCHAR2(1),
+    SHOW_FIRST        VARCHAR2(1),
+    NEED_LOGIN        VARCHAR2(1)    default '0',
+    SUPPORT_USER_TYPE VARCHAR2(8)
+);
+comment on table APP_PRODUCT_MENU is '产品菜单表';
+comment on column APP_PRODUCT_MENU.ID is 'ID';
+comment on column APP_PRODUCT_MENU.MENU_NAME is '名称';
+comment on column APP_PRODUCT_MENU.PRODUCT_DESC is '描述';
+comment on column APP_PRODUCT_MENU.CONSULT_WORK_NO is '负责人工号';
+comment on column APP_PRODUCT_MENU.BUSINESS_TYPE is '业务种类';
+comment on column APP_PRODUCT_MENU.MENU_ICON is '菜单图标';
+comment on column APP_PRODUCT_MENU.CATEGORY_ID is '分类ID';
+comment on column APP_PRODUCT_MENU.ADVERT_PHOTO is '广告图地址';
+comment on column APP_PRODUCT_MENU.JUMP_URL is '可购页面';
+comment on column APP_PRODUCT_MENU.JUMP_PARAM is '可购页面参数';
+comment on column APP_PRODUCT_MENU.HOLD_URL is '持有页面';
+comment on column APP_PRODUCT_MENU.HOLD_PARAM is '持有页面参数';
+comment on column APP_PRODUCT_MENU.FONT_ID is '字体ID';
+comment on column APP_PRODUCT_MENU.SORT is '排序';
+comment on column APP_PRODUCT_MENU.DELETED is '是否已删除（0否 1是）';
+comment on column APP_PRODUCT_MENU.CREATE_TIME is '创建时间';
+comment on column APP_PRODUCT_MENU.UPDATE_TIME is '修改时间';
+comment on column APP_PRODUCT_MENU.USABLE is '是否启用，0：不启用；1：启用';
+comment on column APP_PRODUCT_MENU.SHOW_FIRST is '是否首页展示，0：不展示；1：展示';
+comment on column APP_PRODUCT_MENU.NEED_LOGIN is '查看时是否需要登陆，0:不需要;1:需要';
+comment on column APP_PRODUCT_MENU.SUPPORT_USER_TYPE is '支持的用户类型，详见 com.sunyard.enumeration.UserInfoTypeEnum';
+create sequence S_PRODUCT_MENU_ID;
+create trigger PRODUCT_MENU_TRIGGER
+    before insert
+    on APP_PRODUCT_MENU
+    for each row
+BEGIN
+    select S_PRODUCT_MENU_ID.nextval into :NEW.id from dual;
+END;
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table APP_PRODUCT_MENU_CATEGORY
+(
+    ID            NUMBER(10) not null
+        primary key,
+    CATEGORY_NAME VARCHAR2(64),
+    CATEGORY_DESC VARCHAR2(512),
+    SHOW_STYLE    VARCHAR2(1),
+    SORT          NUMBER(10),
+    DELETED       VARCHAR2(1),
+    CREATE_TIME   TIMESTAMP(6),
+    UPDATE_TIME   TIMESTAMP(6)
+);
+comment on table APP_PRODUCT_MENU_CATEGORY is '产品菜单分类表';
+comment on column APP_PRODUCT_MENU_CATEGORY.ID is 'ID';
+comment on column APP_PRODUCT_MENU_CATEGORY.CATEGORY_NAME is '名称';
+comment on column APP_PRODUCT_MENU_CATEGORY.CATEGORY_DESC is '描述';
+comment on column APP_PRODUCT_MENU_CATEGORY.SHOW_STYLE is '展示风格（1横向  2竖向）';
+comment on column APP_PRODUCT_MENU_CATEGORY.SORT is '排序';
+comment on column APP_PRODUCT_MENU_CATEGORY.DELETED is '是否已删除（0否 1是）';
+comment on column APP_PRODUCT_MENU_CATEGORY.CREATE_TIME is '创建时间';
+comment on column APP_PRODUCT_MENU_CATEGORY.UPDATE_TIME is '修改时间';
+create sequence S_PRODUCT_MENU_CATEGORY_ID;
+create trigger PRODUCT_MENU_CATEGORY_TRIGGER
+    before insert
+    on APP_PRODUCT_MENU_CATEGORY
+    for each row
+BEGIN
+    select S_PRODUCT_MENU_CATEGORY_ID.nextval into :NEW.id from dual;
+END;
+
+
+------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 -- drop table ADMIN_LOGIN_LOG;
@@ -361,6 +452,8 @@ create sequence S_WD_BLOCK_USER_ID;
 -- drop table WD_USER_INFO;
 -- drop table WD_USER_TOKEN;
 -- drop table WD_BLOCK_USER;
+-- drop table APP_PRODUCT_MENU;
+-- drop table APP_PRODUCT_MENU_CATEGORY;
 --
 -- drop sequence S_ROLE_ID;
 -- drop sequence S_ROLE_MENU_ID;
@@ -368,4 +461,6 @@ create sequence S_WD_BLOCK_USER_ID;
 -- drop sequence S_USER_ID;
 -- drop sequence S_WD_CUST_NO;
 -- drop sequence S_WD_BLOCK_USER_ID;
+-- drop sequence S_PRODUCT_MENU_ID;
+-- drop sequence S_PRODUCT_MENU_CATEGORY_ID;
 

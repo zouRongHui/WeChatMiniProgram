@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.ProductMenuMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.ProductMenu">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+    <result column="PRODUCT_DESC" jdbcType="VARCHAR" property="productDesc" />
+    <result column="MENU_ICON" jdbcType="VARCHAR" property="menuIcon" />
+    <result column="CATEGORY_ID" jdbcType="DECIMAL" property="categoryId" />
+    <result column="ADVERT_PHOTO" jdbcType="VARCHAR" property="advertPhoto" />
+    <result column="JUMP_URL" jdbcType="VARCHAR" property="jumpUrl" />
+    <result column="JUMP_PARAM" jdbcType="VARCHAR" property="jumpParam" />
+    <result column="FONT_ID" jdbcType="DECIMAL" property="fontId" />
+    <result column="SORT" jdbcType="DECIMAL" property="sort" />
+    <result column="DELETED" jdbcType="VARCHAR" property="deleted" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CONSULT_WORK_NO" jdbcType="VARCHAR" property="consultWorkNo" />
+    <result column="BUSINESS_TYPE" jdbcType="VARCHAR" property="businessType" />
+    <result column="HOLD_URL" jdbcType="VARCHAR" property="holdUrl" />
+    <result column="HOLD_PARAM" jdbcType="VARCHAR" property="holdParam" />
+    <result column="USABLE" jdbcType="VARCHAR" property="usable" />
+    <result column="SHOW_FIRST" jdbcType="VARCHAR" property="showFirst" />
+    <result column="NEED_LOGIN" jdbcType="VARCHAR" property="needLogin" />
+    <result column="SUPPORT_USER_TYPE" jdbcType="VARCHAR" property="supportUserType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, MENU_NAME, PRODUCT_DESC, MENU_ICON, CATEGORY_ID, ADVERT_PHOTO, JUMP_URL, JUMP_PARAM,
+    FONT_ID, SORT, DELETED, CREATE_TIME, UPDATE_TIME, CONSULT_WORK_NO, BUSINESS_TYPE,
+    HOLD_URL, HOLD_PARAM, USABLE, SHOW_FIRST, NEED_LOGIN, SUPPORT_USER_TYPE
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.ProductMenuCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from APP_PRODUCT_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from APP_PRODUCT_MENU
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from APP_PRODUCT_MENU
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.rone.entity.ProductMenuCriteria">
+    delete from APP_PRODUCT_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.ProductMenu">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_PRODUCT_MENU_ID.currval from dual
+    </selectKey>
+    insert into APP_PRODUCT_MENU (MENU_NAME, PRODUCT_DESC, MENU_ICON,
+      CATEGORY_ID, ADVERT_PHOTO, JUMP_URL,
+      JUMP_PARAM, FONT_ID, SORT,
+      DELETED, CREATE_TIME, UPDATE_TIME,
+      CONSULT_WORK_NO, BUSINESS_TYPE, HOLD_URL,
+      HOLD_PARAM, USABLE, SHOW_FIRST,
+      NEED_LOGIN, SUPPORT_USER_TYPE)
+    values (#{menuName,jdbcType=VARCHAR}, #{productDesc,jdbcType=VARCHAR}, #{menuIcon,jdbcType=VARCHAR},
+      #{categoryId,jdbcType=DECIMAL}, #{advertPhoto,jdbcType=VARCHAR}, #{jumpUrl,jdbcType=VARCHAR},
+      #{jumpParam,jdbcType=VARCHAR}, #{fontId,jdbcType=DECIMAL}, #{sort,jdbcType=DECIMAL},
+      #{deleted,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{consultWorkNo,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{holdUrl,jdbcType=VARCHAR},
+      #{holdParam,jdbcType=VARCHAR}, #{usable,jdbcType=VARCHAR}, #{showFirst,jdbcType=VARCHAR}},
+      #{needLogin,jdbcType=VARCHAR}, #{supportUserType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.ProductMenu">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      select S_PRODUCT_MENU_ID.currval from dual
+    </selectKey>
+    insert into APP_PRODUCT_MENU
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuName != null">
+        MENU_NAME,
+      </if>
+      <if test="productDesc != null">
+        PRODUCT_DESC,
+      </if>
+      <if test="menuIcon != null">
+        MENU_ICON,
+      </if>
+      <if test="categoryId != null">
+        CATEGORY_ID,
+      </if>
+      <if test="advertPhoto != null">
+        ADVERT_PHOTO,
+      </if>
+      <if test="jumpUrl != null">
+        JUMP_URL,
+      </if>
+      <if test="jumpParam != null">
+        JUMP_PARAM,
+      </if>
+      <if test="fontId != null">
+        FONT_ID,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="deleted != null">
+        DELETED,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="consultWorkNo != null">
+        CONSULT_WORK_NO,
+      </if>
+      <if test="businessType != null">
+        BUSINESS_TYPE,
+      </if>
+      <if test="holdUrl != null">
+        HOLD_URL,
+      </if>
+      <if test="holdParam != null">
+        HOLD_PARAM,
+      </if>
+      <if test="usable != null">
+        USABLE,
+      </if>
+      <if test="showFirst != null">
+        SHOW_FIRST,
+      </if>
+      <if test="needLogin != null">
+        NEED_LOGIN,
+      </if>
+      <if test="supportUserType != null">
+        SUPPORT_USER_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuName != null">
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="productDesc != null">
+        #{productDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIcon != null">
+        #{menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=DECIMAL},
+      </if>
+      <if test="advertPhoto != null">
+        #{advertPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpUrl != null">
+        #{jumpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpParam != null">
+        #{jumpParam,jdbcType=VARCHAR},
+      </if>
+      <if test="fontId != null">
+        #{fontId,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consultWorkNo != null">
+        #{consultWorkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="holdUrl != null">
+        #{holdUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="holdParam != null">
+        #{holdParam,jdbcType=VARCHAR},
+      </if>
+      <if test="usable != null">
+        #{usable,jdbcType=VARCHAR},
+      </if>
+      <if test="showFirst != null">
+        #{showFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="needLogin != null">
+        #{needLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="supportUserType != null">
+        #{supportUserType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.ProductMenuCriteria" resultType="java.lang.Integer">
+    select count(*) from APP_PRODUCT_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update APP_PRODUCT_MENU
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.menuName != null">
+        MENU_NAME = #{record.menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productDesc != null">
+        PRODUCT_DESC = #{record.productDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.menuIcon != null">
+        MENU_ICON = #{record.menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryId != null">
+        CATEGORY_ID = #{record.categoryId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.advertPhoto != null">
+        ADVERT_PHOTO = #{record.advertPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jumpUrl != null">
+        JUMP_URL = #{record.jumpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jumpParam != null">
+        JUMP_PARAM = #{record.jumpParam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fontId != null">
+        FONT_ID = #{record.fontId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sort != null">
+        SORT = #{record.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deleted != null">
+        DELETED = #{record.deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.consultWorkNo != null">
+        CONSULT_WORK_NO = #{record.consultWorkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessType != null">
+        BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.holdUrl != null">
+        HOLD_URL = #{record.holdUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.holdParam != null">
+        HOLD_PARAM = #{record.holdParam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usable != null">
+        USABLE = #{record.usable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showFirst != null">
+        SHOW_FIRST = #{record.showFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="record.needLogin != null">
+        NEED_LOGIN = #{record.needLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supportUserType != null">
+        SUPPORT_USER_TYPE = #{record.supportUserType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update APP_PRODUCT_MENU
+    set ID = #{record.id,jdbcType=DECIMAL},
+      MENU_NAME = #{record.menuName,jdbcType=VARCHAR},
+      PRODUCT_DESC = #{record.productDesc,jdbcType=VARCHAR},
+      MENU_ICON = #{record.menuIcon,jdbcType=VARCHAR},
+      CATEGORY_ID = #{record.categoryId,jdbcType=DECIMAL},
+      ADVERT_PHOTO = #{record.advertPhoto,jdbcType=VARCHAR},
+      JUMP_URL = #{record.jumpUrl,jdbcType=VARCHAR},
+      JUMP_PARAM = #{record.jumpParam,jdbcType=VARCHAR},
+      FONT_ID = #{record.fontId,jdbcType=DECIMAL},
+      SORT = #{record.sort,jdbcType=DECIMAL},
+      DELETED = #{record.deleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      CONSULT_WORK_NO = #{record.consultWorkNo,jdbcType=VARCHAR},
+      BUSINESS_TYPE = #{record.businessType,jdbcType=VARCHAR},
+      HOLD_URL = #{record.holdUrl,jdbcType=VARCHAR},
+      HOLD_PARAM = #{record.holdParam,jdbcType=VARCHAR},
+      USABLE = #{record.usable,jdbcType=VARCHAR},
+      SHOW_FIRST = #{record.showFirst,jdbcType=VARCHAR},
+      NEED_LOGIN = #{record.needLogin,jdbcType=VARCHAR},
+      SUPPORT_USER_TYPE = #{record.supportUserType,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rone.entity.ProductMenu">
+    update APP_PRODUCT_MENU
+    <set>
+      <if test="menuName != null">
+        MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="productDesc != null">
+        PRODUCT_DESC = #{productDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIcon != null">
+        MENU_ICON = #{menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        CATEGORY_ID = #{categoryId,jdbcType=DECIMAL},
+      </if>
+      <if test="advertPhoto != null">
+        ADVERT_PHOTO = #{advertPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpUrl != null">
+        JUMP_URL = #{jumpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="jumpParam != null">
+        JUMP_PARAM = #{jumpParam,jdbcType=VARCHAR},
+      </if>
+      <if test="fontId != null">
+        FONT_ID = #{fontId,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="deleted != null">
+        DELETED = #{deleted,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consultWorkNo != null">
+        CONSULT_WORK_NO = #{consultWorkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="holdUrl != null">
+        HOLD_URL = #{holdUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="holdParam != null">
+        HOLD_PARAM = #{holdParam,jdbcType=VARCHAR},
+      </if>
+      <if test="usable != null">
+        USABLE = #{usable,jdbcType=VARCHAR},
+      </if>
+      <if test="showFirst != null">
+        SHOW_FIRST = #{showFirst,jdbcType=VARCHAR},
+      </if>
+      <if test="needLogin != null">
+        NEED_LOGIN = #{needLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="supportUserType != null">
+        SUPPORT_USER_TYPE = #{supportUserType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rone.entity.ProductMenu">
+    update APP_PRODUCT_MENU
+    set MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      PRODUCT_DESC = #{productDesc,jdbcType=VARCHAR},
+      MENU_ICON = #{menuIcon,jdbcType=VARCHAR},
+      CATEGORY_ID = #{categoryId,jdbcType=DECIMAL},
+      ADVERT_PHOTO = #{advertPhoto,jdbcType=VARCHAR},
+      JUMP_URL = #{jumpUrl,jdbcType=VARCHAR},
+      JUMP_PARAM = #{jumpParam,jdbcType=VARCHAR},
+      FONT_ID = #{fontId,jdbcType=DECIMAL},
+      SORT = #{sort,jdbcType=DECIMAL},
+      DELETED = #{deleted,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      CONSULT_WORK_NO = #{consultWorkNo,jdbcType=VARCHAR},
+      BUSINESS_TYPE = #{businessType,jdbcType=VARCHAR},
+      HOLD_URL = #{holdUrl,jdbcType=VARCHAR},
+      HOLD_PARAM = #{holdParam,jdbcType=VARCHAR},
+      USABLE = #{usable,jdbcType=VARCHAR},
+      SHOW_FIRST = #{showFirst,jdbcType=VARCHAR},
+      NEED_LOGIN = #{needLogin,jdbcType=VARCHAR},
+      SUPPORT_USER_TYPE = #{supportUserType,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
