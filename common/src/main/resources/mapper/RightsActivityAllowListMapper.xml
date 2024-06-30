@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rone.dao.RightsActivityAllowListMapper">
+  <resultMap id="BaseResultMap" type="com.rone.entity.RightsActivityAllowList">
+    <result column="RIGHTS_ACTIVITY_ID" jdbcType="DECIMAL" property="rightsActivityId" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    RIGHTS_ACTIVITY_ID, PHONE
+  </sql>
+  <select id="selectByExample" parameterType="com.rone.entity.RightsActivityAllowListCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.rone.entity.RightsActivityAllowListCriteria">
+    delete from WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.rone.entity.RightsActivityAllowList">
+    insert into WD_RIGHTS_ACTIVITY_ALLOW_LIST (RIGHTS_ACTIVITY_ID, PHONE)
+    values (#{rightsActivityId,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rone.entity.RightsActivityAllowList">
+    insert into WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rightsActivityId != null">
+        RIGHTS_ACTIVITY_ID,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rightsActivityId != null">
+        #{rightsActivityId,jdbcType=DECIMAL},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.rone.entity.RightsActivityAllowListCriteria" resultType="java.lang.Long">
+    select count(*) from WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    <set>
+      <if test="record.rightsActivityId != null">
+        RIGHTS_ACTIVITY_ID = #{record.rightsActivityId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.phone != null">
+        PHONE = #{record.phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WD_RIGHTS_ACTIVITY_ALLOW_LIST
+    set RIGHTS_ACTIVITY_ID = #{record.rightsActivityId,jdbcType=DECIMAL},
+    PHONE = #{record.phone,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into WD_RIGHTS_ACTIVITY_ALLOW_LIST (RIGHTS_ACTIVITY_ID, PHONE)
+    <foreach collection="list" item="item" separator="UNION ALL">
+      select
+      #{item.rightsActivityId,jdbcType=VARCHAR},
+      #{item.phone,jdbcType=VARCHAR}
+      from dual
+    </foreach>
+  </insert>
+</mapper>

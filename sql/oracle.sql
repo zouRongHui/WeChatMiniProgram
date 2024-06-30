@@ -47,6 +47,7 @@ INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, 
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (4, 1, '系统参数管理', 'layui-icon-util', '/sysparam/list', '0', sysdate, null, 'ROLE_SYS_PARAM');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (5, 0, '黑名单用户', 'layui-icon-user', '/blockUser/list', '0', sysdate, null, 'ROLE_BLOCK_USER');
 INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (6, 0, '产品菜单管理', 'layui-icon-list', '/productmenu/list', '0', sysdate, null, 'ROLE_PRODUCT_MENU');
+INSERT INTO ADMIN_MENU_INFO (ID, PARENT_ID, MENU_NAME, MENU_ICON, URL, DELETED, CREATE_TIME, UPDATE_TIME, PERMISSION_CODE) VALUES (7, 0, '权益活动配置', 'layui-icon-list', '/rightsActivity/list', '0', sysdate, null, 'ROLE_RIGHTS_ACTIVITY');
 
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -243,8 +244,6 @@ create table WD_USER_INFO
 (
     WUI_CUST_NO            VARCHAR2(10) not null
         primary key,
-    WUI_CERT_TYPE          VARCHAR2(8),
-    WUI_CERT_NO            VARCHAR2(60),
     WUI_CUST_NAME          VARCHAR2(100),
     WUI_OPENID             VARCHAR2(60),
     WUI_MOBILE_NO          VARCHAR2(11),
@@ -252,36 +251,17 @@ create table WD_USER_INFO
     WUI_REGISTER_TIME      TIMESTAMP(6),
     WUI_UNIONID            VARCHAR2(60),
     WUI_AUTH_MODE          VARCHAR2(10) default '1000000000',
-    WUI_CORE_CUST_NO       VARCHAR2(60),
-    WUI_LEGAL_NO           VARCHAR2(16),
-    WUI_DEFAULT_ACCOUNT_NO VARCHAR2(60),
-    WUI_LINK_MAN_NO        VARCHAR2(20),
-    ORG_NO                 VARCHAR2(16),
-    BRANCH_NO              VARCHAR2(16),
-    USER_TYPE              NUMBER(4),
-    CUST_SOURCE            NUMBER(2),
-    SOURCE_RIGHTS_ID       NUMBER(10)
+    USER_TYPE              NUMBER(4)
 );
 comment on table WD_USER_INFO is '微店小程序用户信息表';
 comment on column WD_USER_INFO.WUI_CUST_NO is '客户编号';
-comment on column WD_USER_INFO.WUI_CERT_TYPE is '证件类型';
-comment on column WD_USER_INFO.WUI_CERT_NO is '证件号码';
 comment on column WD_USER_INFO.WUI_CUST_NAME is '客户姓名';
 comment on column WD_USER_INFO.WUI_OPENID is '微信OPENID';
 comment on column WD_USER_INFO.WUI_MOBILE_NO is '手机号码';
 comment on column WD_USER_INFO.WUI_STATUS is '用户状态 00:正常；01:临时锁定；02:永久锁定；03:注销；';
 comment on column WD_USER_INFO.WUI_REGISTER_TIME is '注册时间';
 comment on column WD_USER_INFO.WUI_UNIONID is '微信UNIONID';
-comment on column WD_USER_INFO.WUI_AUTH_MODE is '第一位:手机验证码（必须开启，默认开启，不可取消）；第二位1100000000:指纹';
-comment on column WD_USER_INFO.WUI_CORE_CUST_NO is '核心客户号';
-comment on column WD_USER_INFO.WUI_LEGAL_NO is '法人机构号';
-comment on column WD_USER_INFO.WUI_DEFAULT_ACCOUNT_NO is '默认关联的账户(卡)';
-comment on column WD_USER_INFO.WUI_LINK_MAN_NO is '推荐注册的客户经理工号';
-comment on column WD_USER_INFO.ORG_NO is '开卡支行号';
-comment on column WD_USER_INFO.BRANCH_NO is '开卡分行号';
-comment on column WD_USER_INFO.USER_TYPE is '用户类型，详见 com.sunyard.enumeration.UserInfoTypeEnum ';
-comment on column WD_USER_INFO.CUST_SOURCE is '客户来源';
-comment on column WD_USER_INFO.SOURCE_RIGHTS_ID is '来源自权益的用户，关联的权益id';
+comment on column WD_USER_INFO.USER_TYPE is '用户类型';
 create sequence S_WD_CUST_NO;
 create trigger WD_USER_INFO_TRIGGER
     before insert
@@ -322,9 +302,6 @@ create table WD_BLOCK_USER
             primary key,
     CUSTOMER_NAME  VARCHAR2(100),
     PHONE          VARCHAR2(11),
-    CARD_NO        VARCHAR2(60),
-    CARD_BRANCH    VARCHAR2(16),
-    CARD_SUBBRANCH VARCHAR2(16),
     OPEN_ID        VARCHAR2(60),
     RULE           VARCHAR2(128),
     CREATE_TIME    TIMESTAMP(6),
@@ -336,9 +313,6 @@ comment on table WD_BLOCK_USER is '黑名单';
 comment on column WD_BLOCK_USER.ID is '主键';
 comment on column WD_BLOCK_USER.CUSTOMER_NAME is '姓名';
 comment on column WD_BLOCK_USER.PHONE is '手机号';
-comment on column WD_BLOCK_USER.CARD_NO is '卡号';
-comment on column WD_BLOCK_USER.CARD_BRANCH is '卡所属分行';
-comment on column WD_BLOCK_USER.CARD_SUBBRANCH is '卡所属支行';
 comment on column WD_BLOCK_USER.OPEN_ID is '微信号open_id';
 comment on column WD_BLOCK_USER.RULE is '违反反欺诈规则';
 comment on column WD_BLOCK_USER.CREATE_TIME is '加入黑名单时间';
@@ -439,6 +413,120 @@ END;
 
 
 ------------------------------------------------------------------------------------------------------------------------
+create table WD_MINI_APP_CODE
+(
+    CODE_PARAMS   VARCHAR2(4000),
+    CODE_URL      VARCHAR2(200),
+    GENERATE_TIME TIMESTAMP(6)
+);
+comment on table WD_MINI_APP_CODE is '小程序分享码';
+comment on column WD_MINI_APP_CODE.CODE_PARAMS is '小程序码包含的参数';
+comment on column WD_MINI_APP_CODE.CODE_URL is '图片地址';
+comment on column WD_MINI_APP_CODE.GENERATE_TIME is '生成时间';
+create index WD_MACCP_INDEX on WD_MINI_APP_CODE (CODE_PARAMS);
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_RIGHTS_ACTIVITY
+(
+    ID                             NUMBER(10) not null
+        constraint WD_RIGHTS_ACTIVITY_PK
+            primary key,
+    IMAGE_BACKGROUND               VARCHAR2(128),
+    IMAGE_LOGO                     VARCHAR2(128),
+    TITLE                          VARCHAR2(64),
+    SUBTITLE                       VARCHAR2(64),
+    INTRODUCE                      VARCHAR2(512),
+    RIGHTS_ID                      VARCHAR2(32),
+    RIGHTS_START_DATE              VARCHAR2(16),
+    RIGHTS_END_DATE                VARCHAR2(16),
+    RIGHTS_NUM                     NUMBER(6),
+    RECEIVE_TIMES_SINGLE           NUMBER(6),
+    RECEIVE_TIMES_TOTAL            NUMBER(6),
+    RECEIVE_TIMES_DONE             NUMBER(6),
+    RECEIVE_TIMES_SURPLUS          NUMBER(6),
+    STATUS                         VARCHAR2(8),
+    CREATE_TIME                    TIMESTAMP(6),
+    DELETE_FLAG                    NUMBER(1),
+    START_DATE                     VARCHAR2(16),
+    END_DATE                       VARCHAR2(16),
+    START_TIME                     VARCHAR2(8),
+    END_TIME                       VARCHAR2(8),
+    RECEIVE_CYCLE                  VARCHAR2(16),
+    RECEIVE_TIMES_SINGLE_FREQUENCY VARCHAR2(1),
+    PHASE_RIGHTS_TOTAL_NUM         NUMBER(6),
+    PHASE_RIGHTS_NUM_CYCLE         VARCHAR2(1),
+    HAS_ALLOW_LIST                 VARCHAR2(1) default '0'
+);
+comment on table WD_RIGHTS_ACTIVITY is '权益活动';
+comment on column WD_RIGHTS_ACTIVITY.ID is '主键';
+comment on column WD_RIGHTS_ACTIVITY.IMAGE_BACKGROUND is '背景图片';
+comment on column WD_RIGHTS_ACTIVITY.IMAGE_LOGO is 'logo图片';
+comment on column WD_RIGHTS_ACTIVITY.TITLE is '主标题';
+comment on column WD_RIGHTS_ACTIVITY.SUBTITLE is '副标题';
+comment on column WD_RIGHTS_ACTIVITY.INTRODUCE is '介绍';
+comment on column WD_RIGHTS_ACTIVITY.RIGHTS_ID is '权益id';
+comment on column WD_RIGHTS_ACTIVITY.RIGHTS_START_DATE is '权益生效时间(yyyy-MM-dd),本日期0点之后才可以领取';
+comment on column WD_RIGHTS_ACTIVITY.RIGHTS_END_DATE is '权益过期时间(yyyy-MM-dd),本日期23:59:59之后不能再领取(领取类型权益专属字段)';
+comment on column WD_RIGHTS_ACTIVITY.RIGHTS_NUM is '权益次数即用户可领取次数,最小值1,最大值99';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_TIMES_SINGLE is '单人可领取次数，-1、0、为空时标识不限制';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_TIMES_TOTAL is '总领取次数，-1、0、为空时标识不限制';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_TIMES_DONE is '权益已经被领取的次数';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_TIMES_SURPLUS is '剩余的领取次数';
+comment on column WD_RIGHTS_ACTIVITY.STATUS is '状态，0:未启用;1:启用';
+comment on column WD_RIGHTS_ACTIVITY.CREATE_TIME is '创建时间';
+comment on column WD_RIGHTS_ACTIVITY.DELETE_FLAG is '删除标志，0:未删除;1:已删除';
+comment on column WD_RIGHTS_ACTIVITY.START_DATE is '活动开始日期，yyyy-MM-dd';
+comment on column WD_RIGHTS_ACTIVITY.END_DATE is '活动截止日期，yyyy-MM-dd';
+comment on column WD_RIGHTS_ACTIVITY.START_TIME is '领取开始时间，hh:mm:ss';
+comment on column WD_RIGHTS_ACTIVITY.END_TIME is '领取截止时间，hh:mm:ss';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_CYCLE is '领取周期，周一至周日，可多选，1:周一，2:周二....';
+comment on column WD_RIGHTS_ACTIVITY.RECEIVE_TIMES_SINGLE_FREQUENCY is '单人可领取次数的频率，(整个活动 每日 每周 每月 每年)';
+comment on column WD_RIGHTS_ACTIVITY.PHASE_RIGHTS_TOTAL_NUM is '阶段权益总领取数量';
+comment on column WD_RIGHTS_ACTIVITY.PHASE_RIGHTS_NUM_CYCLE is '阶段频率(日、周、月、年)';
+comment on column WD_RIGHTS_ACTIVITY.HAS_ALLOW_LIST is '是否配置了白名单，0:否;1:是';
+create sequence S_WD_RIGHTS_ACTIVITY_ID;
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_RIGHTS_ACTIVITY_ALLOW_LIST
+(
+    RIGHTS_ACTIVITY_ID NUMBER(10),
+    PHONE              VARCHAR2(16)
+);
+comment on table WD_RIGHTS_ACTIVITY_ALLOW_LIST is '权益活动白名单';
+comment on column WD_RIGHTS_ACTIVITY_ALLOW_LIST.RIGHTS_ACTIVITY_ID is '权益主键';
+comment on column WD_RIGHTS_ACTIVITY_ALLOW_LIST.PHONE is '手机号';
+create index WD_RIGHTS_ALLOW_LIST_INDEX on WD_RIGHTS_ACTIVITY_ALLOW_LIST (RIGHTS_ACTIVITY_ID);
+
+
+------------------------------------------------------------------------------------------------------------------------
+create table WD_RIGHTS_RECEIVE_LOG
+(
+    ID                NUMBER(10) not null
+        constraint WD_RIGHTS_RECEIVE_LOG_PK
+            primary key,
+    OPEN_ID           VARCHAR2(32),
+    PHONE             VARCHAR2(16),
+    RIGHTS_ID         VARCHAR2(32),
+    RIGHTS_START_DATE VARCHAR2(16),
+    RIGHTS_END_DATE   VARCHAR2(16),
+    RIGHTS_NUM        NUMBER(6),
+    RECEIVE_TIME      TIMESTAMP(6)
+);
+comment on table WD_RIGHTS_RECEIVE_LOG is '权益活动领取记录';
+comment on column WD_RIGHTS_RECEIVE_LOG.ID is '主键';
+comment on column WD_RIGHTS_RECEIVE_LOG.OPEN_ID is '用户微信id';
+comment on column WD_RIGHTS_RECEIVE_LOG.PHONE is '用户手机';
+comment on column WD_RIGHTS_RECEIVE_LOG.RIGHTS_ID is '权益ID';
+comment on column WD_RIGHTS_RECEIVE_LOG.RIGHTS_START_DATE is '权益生效时间(yyyy-MM-dd),本日期0点之后才可以领取';
+comment on column WD_RIGHTS_RECEIVE_LOG.RIGHTS_END_DATE is '权益过期时间(yyyy-MM-dd),本日期23:59:59之后不能再领取(领取类型权益专属字段)';
+comment on column WD_RIGHTS_RECEIVE_LOG.RIGHTS_NUM is '权益次数即用户可领取次数,最小值1,最大值99';
+comment on column WD_RIGHTS_RECEIVE_LOG.RECEIVE_TIME is '领取时间';
+create sequence S_WD_RIGHTS_RECEIVE_ID;
+
+
+------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 -- drop table ADMIN_LOGIN_LOG;
@@ -454,6 +542,10 @@ END;
 -- drop table WD_BLOCK_USER;
 -- drop table APP_PRODUCT_MENU;
 -- drop table APP_PRODUCT_MENU_CATEGORY;
+-- drop table WD_MINI_APP_CODE;
+-- drop table WD_RIGHTS_ACTIVITY;
+-- drop table WD_RIGHTS_ACTIVITY_ALLOW_LIST;
+-- drop table WD_RIGHTS_RECEIVE_LOG;
 --
 -- drop sequence S_ROLE_ID;
 -- drop sequence S_ROLE_MENU_ID;
@@ -463,4 +555,6 @@ END;
 -- drop sequence S_WD_BLOCK_USER_ID;
 -- drop sequence S_PRODUCT_MENU_ID;
 -- drop sequence S_PRODUCT_MENU_CATEGORY_ID;
+-- drop sequence S_WD_RIGHTS_ACTIVITY_ID;
+-- drop sequence S_WD_RIGHTS_RECEIVE_ID;
 
