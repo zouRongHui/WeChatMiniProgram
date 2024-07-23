@@ -1,5 +1,9 @@
 # 微信小程序项目
 分为管理端和服务端两个服务
+## 特别鸣谢
+<a href="https://www.jetbrains.com/idea/" title="jetbrains" target="_blank" >
+    <img width="55px" src="https://www.xuxueli.com/page/static/images/logo_intellij.jpeg" >
+</a>
 
 ## 管理端功能
 ### 管理员登录
